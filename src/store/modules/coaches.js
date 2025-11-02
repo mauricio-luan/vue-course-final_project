@@ -33,6 +33,12 @@ export default {
       return state.coaches
     },
 
+    getCoachById(state) {
+      return (coachId) => {
+        return state.coaches.find((c) => c.id === coachId)
+      }
+    },
+
     hasCoaches(state) {
       return state.coaches && state.coaches.length > 0
     },

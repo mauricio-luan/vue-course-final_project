@@ -17,6 +17,7 @@ const router = createRouter({
     {
       path: '/coaches/:id',
       name: 'coach-detail',
+      props: true,
       component: () => import('@/pages/coaches/CoachDetail.vue'),
       children: [
         {
