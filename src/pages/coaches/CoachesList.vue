@@ -1,7 +1,5 @@
-<template lang="">
-  <div></div>
+<template>
+  <section>Filter</section>
+
+  <section>CartCoach</section>
 </template>
-<script>
-export default {}
-</script>
-<style lang=""></style>
