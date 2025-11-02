@@ -1,6 +1,4 @@
-<template lang="">
-  <div></div>
-</template>
+<template>COACH CONTACT</template>
 <script>
 export default {}
 </script>
