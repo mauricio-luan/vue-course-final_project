@@ -24,9 +24,26 @@ export default {
     ],
   },
 
-  mutations: {},
+  mutations: {
+    addCoach(state, payload) {
+      state.coaches.push(payload)
+    },
+  },
 
-  actions: {},
+  actions: {
+    addCoach(context, data) {
+      const newCoach = {
+        id: context.rootGetters.userId,
+        firstName: data.first,
+        lastName: data.last,
+        areas: data.areas,
+        description: data.desc,
+        hourlyRate: data.rate,
+      }
+
+      context.commit('addCoach', newCoach)
+    },
+  },
 
   getters: {
     getAllCoaches(state) {
@@ -41,6 +58,12 @@ export default {
 
     hasCoaches(state) {
       return state.coaches && state.coaches.length > 0
+    },
+
+    isCoach(state, getters, rootState, rootGetters) {
+      const userId = rootGetters.userId
+      const coaches = getters.getAllCoaches
+      return coaches.some((coach) => coach.id === userId)
     },
   },
 }
