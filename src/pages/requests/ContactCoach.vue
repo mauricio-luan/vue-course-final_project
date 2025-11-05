@@ -32,6 +32,14 @@ export default {
         this.isFormValid = false
         return
       }
+
+      this.$store.dispatch('requests/addRequest', {
+        coachId: this.$route.params.id,
+        userEmail: this.email,
+        userMessage: this.message,
+      })
+
+      this.$router.replace({ name: 'coach-list' })
     },
   },
 }
