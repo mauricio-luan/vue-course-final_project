@@ -27,7 +27,7 @@ export default {
 
   computed: {
     requests() {
-      return this.$store.getters['requests/getAllRequests']
+      return this.$store.getters['requests/getRequestsAssociatedWithUserId']
     },
 
     hasRequest() {

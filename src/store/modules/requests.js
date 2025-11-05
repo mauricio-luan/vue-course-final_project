@@ -29,8 +29,14 @@ export default {
       return state.requests
     },
 
-    hasRequest(state) {
-      return state.requests && state.requests.length > 0
+    getRequestsAssociatedWithUserId(state, _, _2, rootGetters) {
+      const userId = rootGetters.userId
+      return state.requests.filter((req) => req.coachId === userId)
+    },
+
+    hasRequest(_, getters) {
+      return getters.getRequestsAssociatedWithUserId && getters.getRequestsAssociatedWithUserId > 0
+      // return state.requests && state.requests.length > 0
     },
   },
 }
