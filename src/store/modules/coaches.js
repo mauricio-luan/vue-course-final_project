@@ -64,10 +64,16 @@ export default {
 
     async setCoaches(context) {
       const response = await fetch(
-        'https://vue-http-demo-mauricio-default-rtdb.firebaseio.com/coaches.json', //fetch all coaches no banco
+        'https://vue-http-demo-mauricio-default-rtdb.firebaseio.com/coaches.jso', //fetch all coaches no banco
       )
 
       const responseData = await response.json()
+
+      if (!response.ok) {
+        const error = new Error(responseData.message || 'Failed to fetch...')
+        throw error
+      }
+
       const coaches = []
       for (const key in responseData) {
         const coach = {
