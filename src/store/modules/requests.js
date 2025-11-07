@@ -11,8 +11,18 @@ export default {
     },
   },
 
+  // parei aqui <<<<<<<<<<<<<<<<<
   actions: {
     addRequest(context, payload) {
+      const coachId = payload.coachId
+      const response = fetch(
+        `https://vue-http-demo-mauricio-default-rtdb.firebaseio.com/requests/${coachId}.json`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(payload),
+        },
+      )
+
       const newRequest = {
         ...payload,
         id: new Date().toISOString(),
