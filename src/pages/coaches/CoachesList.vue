@@ -7,9 +7,7 @@
     <base-card>
       <div class="controls">
         <base-button mode="outline">Refresh</base-button>
-        <base-button v-if="!isCoach" link :to="{ name: 'coach-register' }">
-          Register as Coach
-        </base-button>
+        <base-button v-if="!isCoach" link :to="'/register'"> Register as Coach </base-button>
       </div>
       <ul v-if="hasCoaches">
         <CoachItem
@@ -35,6 +33,10 @@ import CoachFilter from '@/components/coaches/CoachFilter.vue'
 
 export default {
   components: { CoachItem, CoachFilter },
+
+  created() {
+    this.setCoaches()
+  },
 
   data() {
     return {
@@ -63,6 +65,10 @@ export default {
   methods: {
     setFilters(updatedFilter) {
       this.activeFilters = updatedFilter
+    },
+
+    setCoaches() {
+      this.$store.dispatch('coaches/setCoaches')
     },
   },
 }

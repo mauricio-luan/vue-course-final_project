@@ -13,7 +13,7 @@ export default {
   props: {
     mode: { type: String, required: false, default: '' },
     link: { type: Boolean, required: false, default: false },
-    to: { type: String, required: false, default: '#' },
+    to: { type: [String, Object], required: false, default: '#' },
   },
 }
 </script>

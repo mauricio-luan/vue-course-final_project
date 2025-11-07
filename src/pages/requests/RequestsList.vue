@@ -23,6 +23,11 @@
 import RequestItem from '@/components/requests/RequestItem.vue'
 
 export default {
+  // created() {
+  //   console.log(this.requests)
+  //   console.log(this.hasRequest)
+  // },
+
   components: { RequestItem },
 
   computed: {
@@ -36,6 +41,7 @@ export default {
   },
 }
 </script>
+
 <style scoped>
 header {
   text-align: center;

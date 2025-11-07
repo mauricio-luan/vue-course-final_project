@@ -16,10 +16,8 @@ export default {
       const newRequest = {
         ...payload,
         id: new Date().toISOString(),
-        /*  coachId: payload.coachId,
-        userEmail: payload.email,
-        userMessage: payload.message, */
       }
+
       context.commit('addRequest', newRequest)
     },
   },
@@ -35,8 +33,7 @@ export default {
     },
 
     hasRequest(_, getters) {
-      return getters.getRequestsAssociatedWithUserId && getters.getRequestsAssociatedWithUserId > 0
-      // return state.requests && state.requests.length > 0
+      return getters.getRequestsAssociatedWithUserId.length > 0
     },
   },
 }

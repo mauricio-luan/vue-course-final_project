@@ -28,12 +28,16 @@ export default {
     addCoach(state, payload) {
       state.coaches.push(payload)
     },
+
+    setCoaches(state, payload) {
+      state.coaches = payload
+    },
   },
 
   actions: {
-    addCoach(context, data) {
+    async addCoach(context, data) {
+      const userId = context.rootGetters.userId
       const newCoach = {
-        id: context.rootGetters.userId,
         firstName: data.first,
         lastName: data.last,
         areas: data.areas,
@@ -41,7 +45,43 @@ export default {
         hourlyRate: data.rate,
       }
 
-      context.commit('addCoach', newCoach)
+      const response = await fetch(
+        `https://vue-http-demo-mauricio-default-rtdb.firebaseio.com/coaches/${userId}.json`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(newCoach),
+        },
+      )
+
+      // const responseData = await response.json()
+
+      if (!response.ok)
+        context.commit('addCoach', {
+          ...newCoach,
+          id: userId,
+        })
+    },
+
+    async setCoaches(context) {
+      const response = await fetch(
+        'https://vue-http-demo-mauricio-default-rtdb.firebaseio.com/coaches.json', //fetch all coaches no banco
+      )
+
+      const responseData = await response.json()
+      const coaches = []
+      for (const key in responseData) {
+        const coach = {
+          id: key,
+          firstName: responseData[key].firstName,
+          lastName: responseData[key].lastName,
+          areas: responseData[key].areas,
+          description: responseData[key].description,
+          hourlyRate: responseData[key].hourlyRate,
+        }
+        coaches.push(coach)
+      }
+
+      context.commit('setCoaches', coaches)
     },
   },
 
