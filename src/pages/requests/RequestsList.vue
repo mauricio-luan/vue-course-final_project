@@ -23,10 +23,13 @@
 import RequestItem from '@/components/requests/RequestItem.vue'
 
 export default {
-  // created() {
-  //   console.log(this.requests)
-  //   console.log(this.hasRequest)
-  // },
+  created() {
+    //debug - apagar depois
+    console.log(this.requests)
+    console.log(this.hasRequest)
+    //this.setRequests()
+    this.$store.dispatch('requests/setRequests')
+  },
 
   components: { RequestItem },
 

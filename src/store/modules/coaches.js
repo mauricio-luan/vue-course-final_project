@@ -1,3 +1,5 @@
+// const coachesUrl = import.meta.env.VITE_COACHES_BASE_URL
+
 export default {
   namespaced: true,
 
@@ -55,7 +57,7 @@ export default {
 
       // const responseData = await response.json()
 
-      if (!response.ok)
+      if (response.ok)
         context.commit('addCoach', {
           ...newCoach,
           id: userId,
