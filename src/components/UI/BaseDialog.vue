@@ -1,21 +1,22 @@
 <template>
   <teleport to="body">
-    <div v-if="show" @click="tryClose" class="backdrop"></div>
-    <dialog open v-if="show">
-      <header>
-        <slot name="header">
-          <h2>{{ title }}</h2>
-        </slot>
-      </header>
-      <section>
-        <slot></slot>
-      </section>
-      <menu v-if="!fixed">
-        <slot name="actions">
-          <base-button @click="tryClose">Close</base-button>
-        </slot>
-      </menu>
-    </dialog>
+    <div v-if="show" @click="tryClose" class="backdrop">
+      <dialog open v-if="show">
+        <header>
+          <slot name="header">
+            <h2>{{ title }}</h2>
+          </slot>
+        </header>
+        <section>
+          <slot></slot>
+        </section>
+        <menu v-if="!fixed">
+          <slot name="actions">
+            <base-button @click="tryClose">Close</base-button>
+          </slot>
+        </menu>
+      </dialog>
+    </div>
   </teleport>
 </template>
 
@@ -40,12 +41,12 @@ export default {
   methods: {
     tryClose() {
       if (this.fixed) {
-        return;
+        return
       }
-      this.$emit('close');
+      this.$emit('close')
     },
   },
-};
+}
 </script>
 
 <style scoped>

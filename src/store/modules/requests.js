@@ -12,40 +12,61 @@ export default {
       state.requests.push(payload)
     },
 
-    setRequest(state, payload) {
+    setRequests(state, payload) {
       state.requests = payload
     },
   },
 
   actions: {
     async addRequest(context, payload) {
-      const body = { method: 'POST', body: JSON.stringify(payload) }
-      const response = await fetch(`${requestsUrl}/${payload.coachId}.json`, body)
+      try {
+        if (!payload?.coachId) throw new Error('Coach ID is required')
 
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message || 'Something went wrong man...')
+        const response = await fetch(`${requestsUrl}/${payload.coachId}.json`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
 
-      const newRequest = { ...payload, id: data.name }
-      context.commit('addRequest', newRequest)
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.message || 'Failed to add request...')
+        }
+
+        const data = await response.json()
+        const newRequest = { ...payload, id: data.name }
+        context.commit('addRequest', newRequest)
+      } catch (error) {
+        console.error('Error at add request: ', error.message)
+        throw error
+      }
     },
 
     async setRequests(context) {
-      const coachId = context.rootGetters.userId
-      const response = await fetch(`${requestsUrl}/${coachId}.json`)
+      try {
+        const coachId = context.rootGetters.userId
+        const response = await fetch(`${requestsUrl}/${coachId}.json`)
 
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message || 'Error at fetch requests...')
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}))
+          throw Error(errorData.message || 'Error at fetch requests...')
+        }
 
-      /*
-      fiz dessa forma mas achei que nao ficou claro a intenção...
-      const ArrRequests = Object.entries(data)
-      const requests = ArrRequests.map((req) => ({ id: req[0], ...req[1] }))
-      */
-      const requests = []
-      for (const req in data) {
-        requests.push({ id: req, ...data[req] })
+        const data = await response.json()
+        if (!data) {
+          context.commit('setRequests', [])
+          return
+        }
+
+        const requests = []
+        for (const req in data) {
+          requests.push({ id: req, ...data[req] })
+        }
+        context.commit('setRequests', requests)
+      } catch (error) {
+        console.error(error)
+        throw error
       }
-      context.commit('setRequest', requests)
     },
   },
 

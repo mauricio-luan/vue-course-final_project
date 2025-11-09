@@ -1,4 +1,7 @@
 <template>
+  <base-dialog :show="!!errorMessage" title="set requests" @close="closeDialog">
+    {{ errorMessage }}
+  </base-dialog>
   <section>
     <base-card>
       <header>
@@ -16,22 +19,23 @@
       <h3 v-else>You have not requests yet.</h3>
     </base-card>
   </section>
-  <div></div>
 </template>
 
 <script>
 import RequestItem from '@/components/requests/RequestItem.vue'
 
 export default {
+  components: { RequestItem },
+
   created() {
-    //debug - apagar depois
-    console.log(this.requests)
-    console.log(this.hasRequest)
-    //this.setRequests()
-    this.$store.dispatch('requests/setRequests')
+    this.setRequests()
   },
 
-  components: { RequestItem },
+  data() {
+    return {
+      errorMessage: null,
+    }
+  },
 
   computed: {
     requests() {
@@ -40,6 +44,20 @@ export default {
 
     hasRequest() {
       return this.$store.getters['requests/hasRequest']
+    },
+  },
+
+  methods: {
+    async setRequests() {
+      try {
+        await this.$store.dispatch('requests/setRequests')
+      } catch (error) {
+        this.errorMessage = error.message
+      }
+    },
+
+    closeDialog() {
+      this.errorMessage = null
     },
   },
 }

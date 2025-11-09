@@ -1,4 +1,12 @@
 <template>
+  <base-dialog
+    :show="!!errorMessage"
+    title="Error"
+    @close="$router.replace({ name: 'coach-list' })"
+  >
+    {{ errorMessage }}</base-dialog
+  >
+
   <form @submit.prevent="submitForm">
     <div class="form-control">
       <label for="email">Your E-mail: </label>
@@ -22,24 +30,30 @@ export default {
       email: '',
       message: '',
       isFormValid: true,
+      errorMessage: null,
     }
   },
 
   methods: {
-    submitForm() {
-      this.isFormValid = true
-      if (this.email === '' || !this.email.includes('@') || this.message === '') {
-        this.isFormValid = false
-        return
+    async submitForm() {
+      try {
+        this.isFormValid = true
+        if (this.email === '' || !this.email.includes('@') || this.message === '') {
+          this.isFormValid = false
+          return
+        }
+
+        const newRequest = {
+          coachId: this.$route.params.id,
+          userEmail: this.email,
+          userMessage: this.message,
+        }
+        await this.$store.dispatch('requests/addRequest', newRequest)
+
+        this.$router.replace({ name: 'coach-list' })
+      } catch (error) {
+        this.errorMessage = error.message
       }
-
-      this.$store.dispatch('requests/addRequest', {
-        coachId: this.$route.params.id,
-        userEmail: this.email,
-        userMessage: this.message,
-      })
-
-      this.$router.replace({ name: 'coach-list' })
     },
   },
 }
