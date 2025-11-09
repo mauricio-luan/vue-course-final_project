@@ -43,12 +43,7 @@ export default {
       */
       const requests = []
       for (const req in data) {
-        requests.push({
-          id: req,
-          coachId: data[req].coachId,
-          userEmail: data[req].userEmail,
-          userMessage: data[req].userMessage,
-        })
+        requests.push({ id: req, ...data[req] })
       }
       context.commit('setRequest', requests)
     },
