@@ -64,12 +64,12 @@
       <div>
         <input
           type="checkbox"
-          id="carrer"
-          value="carrer"
+          id="career"
+          value="career"
           v-model="areas.val"
           @blur="clearValidaty('areas')"
         />
-        <label for="carrer">Career</label>
+        <label for="career">Career</label>
       </div>
       <p v-if="!areas.isValid">At least one of expertises must be selected.</p>
     </div>
@@ -145,13 +145,12 @@ export default {
       }
 
       const formData = {
-        first: this.firstName.val,
-        last: this.lastName.val,
-        desc: this.description.val,
-        rate: this.rate.val,
+        firstName: this.firstName.val,
+        lastName: this.lastName.val,
+        description: this.description.val,
+        hourlyRate: this.rate.val,
         areas: this.areas.val,
       }
-      console.log(formData)
       this.$emit('save-data', formData)
     },
   },

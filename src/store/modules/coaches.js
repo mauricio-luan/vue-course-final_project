@@ -1,4 +1,4 @@
-// const coachesUrl = import.meta.env.VITE_COACHES_BASE_URL
+const coachesUrl = import.meta.env.VITE_COACHES_BASE_URL
 
 export default {
   namespaced: true,
@@ -37,58 +37,28 @@ export default {
   },
 
   actions: {
-    async addCoach(context, data) {
+    async addCoach(context, payload) {
       const userId = context.rootGetters.userId
-      const newCoach = {
-        firstName: data.first,
-        lastName: data.last,
-        areas: data.areas,
-        description: data.desc,
-        hourlyRate: data.rate,
-      }
 
-      const response = await fetch(
-        `https://vue-http-demo-mauricio-default-rtdb.firebaseio.com/coaches/${userId}.json`,
-        {
-          method: 'PUT',
-          body: JSON.stringify(newCoach),
-        },
-      )
+      const body = { method: 'PUT', body: JSON.stringify(payload) }
+      const response = await fetch(`${coachesUrl}/${userId}.json`, body)
 
-      // const responseData = await response.json()
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.message || 'Failed to add coach...')
 
-      if (response.ok)
-        context.commit('addCoach', {
-          ...newCoach,
-          id: userId,
-        })
+      context.commit('addCoach', { ...payload, id: userId })
     },
 
     async setCoaches(context) {
-      const response = await fetch(
-        'https://vue-http-demo-mauricio-default-rtdb.firebaseio.com/coaches.json', //fetch all coaches no banco
-      )
+      const response = await fetch(`${coachesUrl}.json`)
 
-      const responseData = await response.json()
-
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to fetch...')
-        throw error
-      }
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.message || 'Failed to fetch coaches...')
 
       const coaches = []
-      for (const key in responseData) {
-        const coach = {
-          id: key,
-          firstName: responseData[key].firstName,
-          lastName: responseData[key].lastName,
-          areas: responseData[key].areas,
-          description: responseData[key].description,
-          hourlyRate: responseData[key].hourlyRate,
-        }
-        coaches.push(coach)
+      for (const key in data) {
+        coaches.push({ ...data[key], id: key })
       }
-
       context.commit('setCoaches', coaches)
     },
   },
@@ -108,7 +78,7 @@ export default {
       return state.coaches && state.coaches.length > 0
     },
 
-    isCoach(state, getters, rootState, rootGetters) {
+    isCoach(_, getters, __, rootGetters) {
       const userId = rootGetters.userId
       const coaches = getters.getAllCoaches
       return coaches.some((coach) => coach.id === userId)

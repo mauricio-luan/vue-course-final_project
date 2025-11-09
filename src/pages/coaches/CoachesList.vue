@@ -56,7 +56,7 @@ export default {
       activeFilters: {
         frontend: true,
         backend: true,
-        carrer: true,
+        career: true,
       },
     }
   },
@@ -73,7 +73,7 @@ export default {
       return coaches.filter((c) => {
         if (this.activeFilters.frontend && c.areas.includes('frontend')) return true
         if (this.activeFilters.backend && c.areas.includes('backend')) return true
-        if (this.activeFilters.carrer && c.areas.includes('carrer')) return true
+        if (this.activeFilters.career && c.areas.includes('career')) return true
         return false
       })
     },

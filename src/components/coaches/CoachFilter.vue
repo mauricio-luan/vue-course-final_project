@@ -6,8 +6,8 @@
       <label for="frontend">Frontend</label>
       <input type="checkbox" id="backend" checked @change="setFilter" />
       <label for="backend">Backend</label>
-      <input type="checkbox" id="carrer" checked @change="setFilter" />
-      <label for="carrer">Carrer</label>
+      <input type="checkbox" id="career" checked @change="setFilter" />
+      <label for="career">Career</label>
     </span>
   </base-card>
 </template>
@@ -19,7 +19,7 @@ export default {
       filters: {
         frontend: true,
         backend: true,
-        carrer: true,
+        career: true,
       },
     }
   },
