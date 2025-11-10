@@ -75,12 +75,12 @@ export default {
       return state.requests
     },
 
-    getRequestsAssociatedWithUserId(state, _, _2, rootGetters) {
+    getRequestsAssociatedWithUserId(_state, getters, _rootState, rootGetters) {
       const userId = rootGetters.userId
-      return state.requests.filter((req) => req.coachId === userId)
+      return getters.getAllRequests.filter((req) => req.coachId === userId)
     },
 
-    hasRequest(_, getters) {
+    hasRequest(_state, getters) {
       return getters.getRequestsAssociatedWithUserId.length > 0
     },
   },

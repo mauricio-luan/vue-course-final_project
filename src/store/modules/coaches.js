@@ -38,15 +38,28 @@ export default {
 
   actions: {
     async addCoach(context, payload) {
-      const userId = context.rootGetters.userId
+      try {
+        const userId = context.rootGetters.userId
+        const body = { method: 'PUT', body: JSON.stringify(payload) }
+        const response = await fetch(`${coachesUrl}/${userId}.json`, body)
 
-      const body = { method: 'PUT', body: JSON.stringify(payload) }
-      const response = await fetch(`${coachesUrl}/${userId}.json`, body)
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.message || 'Failed to add coach...')
 
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message || 'Failed to add coach...')
+        context.commit('addCoach', { ...payload, id: userId })
+      } catch (error) {
+        console.error('Error: ', error.message)
+        throw error
+      }
+      // const userId = context.rootGetters.userId
 
-      context.commit('addCoach', { ...payload, id: userId })
+      // const body = { method: 'PUT', body: JSON.stringify(payload) }
+      // const response = await fetch(`${coachesUrl}/${userId}.json`, body)
+
+      // const data = await response.json()
+      // if (!response.ok) throw new Error(data.message || 'Failed to add coach...')
+
+      // context.commit('addCoach', { ...payload, id: userId })
     },
 
     async setCoaches(context) {
