@@ -1,7 +1,8 @@
 <template>
   <base-dialog :show="!!errorMessage" title="Form invalid!" @close="errorMessage = null">
-    {{ errorMessage }}</base-dialog
-  >
+    {{ errorMessage }}
+  </base-dialog>
+
   <section>
     <base-card>
       <form @submit.prevent="submitForm">
@@ -29,6 +30,7 @@ export default {
       email: '',
       password: '',
       isFormValid: true,
+      isLoading: false,
       errorMessage: null,
       mode: 'login',
     }
@@ -54,6 +56,7 @@ export default {
 
   methods: {
     async submitForm() {
+      this.isLoading = true
       this.isFormValid = true
       if (this.email === '' || this.password.length < 6 || this.password === '') {
         this.errorMessage = 'Fields must not be empty.'
@@ -62,7 +65,12 @@ export default {
       }
 
       if (this.mode == 'signup') {
-        await this.$store.dispatch('signup', {
+        await this.$store.dispatch('auth/signup', {
+          email: this.email,
+          password: this.password,
+        })
+      } else {
+        await this.$store.dispatch('auth/login', {
           email: this.email,
           password: this.password,
         })

@@ -39,9 +39,10 @@ export default {
   actions: {
     async addCoach(context, payload) {
       try {
-        const userId = context.rootGetters.userId
+        const userId = context.rootGetters['auth/userId']
+        const token = context.rootGetters['auth/getToken']
         const body = { method: 'PUT', body: JSON.stringify(payload) }
-        const response = await fetch(`${coachesUrl}/${userId}.json`, body)
+        const response = await fetch(`${coachesUrl}/${userId}.json?auth=${token}`, body)
 
         const data = await response.json()
         if (!response.ok) throw new Error(data.message || 'Failed to add coach...')

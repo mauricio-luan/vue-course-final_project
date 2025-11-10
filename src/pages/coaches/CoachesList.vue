@@ -11,8 +11,13 @@
     <base-card>
       <div class="controls">
         <base-button mode="outline" @click="setCoaches">Refresh</base-button>
-        <base-button v-if="!isCoach && !isLoading" link :to="'/register'">
-          Register as Coach
+        <!-- Esse botao so deve ser visivel quando usuario estiver autenticado -->
+        <base-button
+          v-if="!isCoach && !isLoading"
+          link
+          :to="isAuthenticated ? '/register' : '/auth'"
+        >
+          {{ isAuthenticated ? 'Register as a Coach' : 'Login' }}
         </base-button>
       </div>
 
@@ -47,6 +52,7 @@ export default {
 
   created() {
     this.setCoaches()
+    // console.log(this.isAuthenticated)
   },
 
   data() {
@@ -66,6 +72,10 @@ export default {
 
     shouldShowCoachesList() {
       return !this.isLoading && this.hasCoaches
+    },
+
+    isAuthenticated() {
+      return this.$store.getters['auth/isAuthenticated']
     },
 
     filteredCoaches() {

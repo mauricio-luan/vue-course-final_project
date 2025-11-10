@@ -44,8 +44,9 @@ export default {
 
     async setRequests(context) {
       try {
-        const coachId = context.rootGetters.userId
-        const response = await fetch(`${requestsUrl}/${coachId}.json`)
+        const coachId = context.rootGetters['auth/userId']
+        const token = context.rootGetters['auth/getToken']
+        const response = await fetch(`${requestsUrl}/${coachId}.json?auth=${token}`)
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}))
