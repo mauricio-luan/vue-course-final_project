@@ -20,40 +20,23 @@ export default {
   },
 
   actions: {
-    async login(context, payload) {
-      const response = await fetch(`${signinUrl}${authToken}`, {
+    async sign(context, payload) {
+      const url = payload.mode === 'login' ? signinUrl : signupUrl
+      const content = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, returnSecureToken: true }),
-      })
+        body: JSON.stringify({
+          email: payload.email,
+          password: payload.password,
+          returnSecureToken: true,
+        }),
+      }
+      const response = await fetch(`${url}${authToken}`, content)
 
       const data = await response.json()
       if (!response.ok) {
-        console.log(data)
         throw new Error(data.message || 'failed to authenticated')
       }
-      console.log(data)
-      context.commit('setSession', {
-        userId: data.localId,
-        token: data.idToken,
-        tokenExpiration: data.expiresIn,
-      })
-    },
-
-    async signup(context, payload) {
-      const response = await fetch(`${signupUrl}${authToken}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, returnSecureToken: true }),
-      })
-
-      const data = await response.json()
-      if (!response.ok) {
-        console.log(data)
-        throw new Error(data.message || 'failed to authenticated')
-      }
-
-      console.log(data)
       context.commit('setSession', {
         userId: data.localId,
         token: data.idToken,

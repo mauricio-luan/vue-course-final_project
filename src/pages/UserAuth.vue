@@ -64,17 +64,11 @@ export default {
         return
       }
 
-      if (this.mode == 'signup') {
-        await this.$store.dispatch('auth/signup', {
-          email: this.email,
-          password: this.password,
-        })
-      } else {
-        await this.$store.dispatch('auth/login', {
-          email: this.email,
-          password: this.password,
-        })
-      }
+      await this.$store.dispatch('auth/sign', {
+        mode: this.mode,
+        email: this.email,
+        password: this.password,
+      })
     },
 
     switchAuthMode() {
