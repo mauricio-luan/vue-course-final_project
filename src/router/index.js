@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store'
 
 import CoachesList from '@/pages/coaches/CoachesList.vue'
 
@@ -30,11 +31,17 @@ const router = createRouter({
     {
       path: '/register',
       name: 'coach-register',
+      meta: {
+        requiresAuth: true,
+      },
       component: () => import('@/pages/coaches/CoachRegister.vue'),
     },
     {
       path: '/requests',
       name: 'requests-list',
+      meta: {
+        requiresAuth: true,
+      },
       component: () => import('@/pages/requests/RequestsList.vue'),
     },
     {
@@ -47,6 +54,21 @@ const router = createRouter({
       component: () => import('@/pages/NotFound.vue'),
     },
   ],
+})
+
+// 1 - se a rota de destino for a tela de login e o cara ja tiver logado, manda pra tela inical
+// 2 - se a rota destino for protegia e usuario deslogado, mandar para login
+// 3 - qualquer condição diferente dessa, aprovar a navegação
+
+router.beforeEach((to, from, next) => {
+  const isLogged = store.getters['auth/isAuthenticated']
+  if (to.path === '/auth' && isLogged) {
+    next({ name: 'coach-list' })
+  } else if (to.meta.requiresAuth && !isLogged) {
+    next({ name: 'user-authentication' })
+  } else {
+    next()
+  }
 })
 
 export default router

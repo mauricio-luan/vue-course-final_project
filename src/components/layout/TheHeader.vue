@@ -12,6 +12,9 @@
         <li>
           <router-link :to="routeName.name">{{ routeName.title }}</router-link>
         </li>
+        <li v-if="isAuthenticated">
+          <base-button @click="logout">Logout</base-button>
+        </li>
       </ul>
     </nav>
   </header>
@@ -19,10 +22,19 @@
 
 <script>
 export default {
+  methods: {
+    logout() {
+      this.$store.dispatch('auth/logout')
+    },
+  },
+
   computed: {
+    isAuthenticated() {
+      return this.$store.getters['auth/isAuthenticated']
+    },
+
     routeName() {
-      const isLoggedIn = this.$store.getters['auth/isAuthenticated']
-      if (isLoggedIn) {
+      if (this.isAuthenticated) {
         return {
           name: { name: 'requests-list' },
           title: 'Requests',

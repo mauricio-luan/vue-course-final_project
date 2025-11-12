@@ -17,7 +17,7 @@
           link
           :to="isAuthenticated ? '/register' : '/auth'"
         >
-          {{ isAuthenticated ? 'Register as a Coach' : 'Login' }}
+          {{ isAuthenticated ? 'Register as a Coach' : 'Login to register as a Coach' }}
         </base-button>
       </div>
 

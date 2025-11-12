@@ -43,6 +43,10 @@ export default {
         tokenExpiration: data.expiresIn,
       })
     },
+
+    logout(context) {
+      context.commit('setSession', { userId: null, token: null, tokenExpiration: null })
+    },
   },
 
   getters: {

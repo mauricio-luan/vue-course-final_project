@@ -69,6 +69,8 @@ export default {
         email: this.email,
         password: this.password,
       })
+
+      this.$router.replace({ name: 'coach-list' })
     },
 
     switchAuthMode() {
