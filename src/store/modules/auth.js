@@ -35,7 +35,7 @@ export default {
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.message || 'failed to authenticated')
+        throw new Error(data.message)
       }
       context.commit('setSession', {
         userId: data.localId,

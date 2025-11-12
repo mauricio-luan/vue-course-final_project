@@ -10,12 +10,32 @@
           <router-link :to="{ name: 'coach-list' }">All coaches</router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'requests-list' }">Requests</router-link>
+          <router-link :to="routeName.name">{{ routeName.title }}</router-link>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  computed: {
+    routeName() {
+      const isLoggedIn = this.$store.getters['auth/isAuthenticated']
+      if (isLoggedIn) {
+        return {
+          name: { name: 'requests-list' },
+          title: 'Requests',
+        }
+      }
+      return {
+        name: { name: 'user-authentication' },
+        title: 'Login',
+      }
+    },
+  },
+}
+</script>
 
 <style scoped>
 header {
