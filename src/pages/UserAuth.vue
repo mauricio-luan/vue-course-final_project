@@ -64,11 +64,12 @@ export default {
         return
       }
 
-      await this.$store.dispatch('auth/sign', {
+      const payload = {
         mode: this.mode,
         email: this.email,
         password: this.password,
-      })
+      }
+      await this.$store.dispatch('auth/sign', payload)
 
       const redirectUrl = this.$route.query.redirect || { name: 'coach-list' }
       this.$router.replace(redirectUrl)

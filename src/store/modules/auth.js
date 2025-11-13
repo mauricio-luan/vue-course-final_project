@@ -37,6 +37,8 @@ export default {
       if (!response.ok) {
         throw new Error(data.message)
       }
+      localStorage.setItem('token', data.idToken)
+      localStorage.setItem('userId', data.localId)
       context.commit('setSession', {
         userId: data.localId,
         token: data.idToken,
@@ -46,6 +48,17 @@ export default {
 
     logout(context) {
       context.commit('setSession', { userId: null, token: null, tokenExpiration: null })
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+    },
+
+    tryLogin(context) {
+      const token = localStorage.getItem('token')
+      const userId = localStorage.getItem('userId')
+
+      if (token && userId) {
+        context.commit('setSession', { userId: userId, token: token, tokenExpiration: null })
+      }
     },
   },
 
