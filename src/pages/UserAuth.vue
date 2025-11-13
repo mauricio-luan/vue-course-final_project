@@ -56,23 +56,27 @@ export default {
 
   methods: {
     async submitForm() {
-      this.isLoading = true
-      this.isFormValid = true
-      if (this.email === '' || this.password.length < 6 || this.password === '') {
-        this.errorMessage = 'Fields must not be empty.'
-        this.isFormValid = false
-        return
-      }
+      try {
+        this.isLoading = true
+        this.isFormValid = true
+        if (this.email === '' || this.password === '') {
+          this.errorMessage = 'Fields must not be empty.'
+          this.isFormValid = false
+          return
+        }
 
-      const payload = {
-        mode: this.mode,
-        email: this.email,
-        password: this.password,
-      }
-      await this.$store.dispatch('auth/sign', payload)
+        const payload = {
+          mode: this.mode,
+          email: this.email,
+          password: this.password,
+        }
+        await this.$store.dispatch('auth/sign', payload)
 
-      const redirectUrl = this.$route.query.redirect || { name: 'coach-list' }
-      this.$router.replace(redirectUrl)
+        const redirectUrl = this.$route.query.redirect || { name: 'coach-list' }
+        this.$router.replace(redirectUrl)
+      } catch (error) {
+        this.errorMessage = error.message
+      }
     },
 
     switchAuthMode() {

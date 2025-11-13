@@ -21,29 +21,38 @@ export default {
 
   actions: {
     async sign(context, payload) {
-      const url = payload.mode === 'login' ? signinUrl : signupUrl
-      const content = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: payload.email,
-          password: payload.password,
-          returnSecureToken: true,
-        }),
-      }
-      const response = await fetch(`${url}${authToken}`, content)
+      try {
+        const url = payload.mode === 'login' ? signinUrl : signupUrl
 
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.message)
+        const content = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: payload.email,
+            password: payload.password,
+            returnSecureToken: true,
+          }),
+        }
+        const response = await fetch(`${url}${authToken}`, content)
+
+        const data = await response.json()
+        if (!response.ok) {
+          const errorMessage = data.error ? data.error.message : 'Failed to authenticate.'
+          throw new Error(errorMessage)
+        }
+
+        localStorage.setItem('token', data.idToken)
+        localStorage.setItem('userId', data.localId)
+
+        context.commit('setSession', {
+          userId: data.localId,
+          token: data.idToken,
+          tokenExpiration: data.expiresIn,
+        })
+      } catch (err) {
+        console.error('Authenticate error: ', err.message)
+        throw err
       }
-      localStorage.setItem('token', data.idToken)
-      localStorage.setItem('userId', data.localId)
-      context.commit('setSession', {
-        userId: data.localId,
-        token: data.idToken,
-        tokenExpiration: data.expiresIn,
-      })
     },
 
     logout(context) {
