@@ -70,7 +70,8 @@ export default {
         password: this.password,
       })
 
-      this.$router.replace({ name: 'coach-list' })
+      const redirectUrl = this.$route.query.redirect || { name: 'coach-list' }
+      this.$router.replace(redirectUrl)
     },
 
     switchAuthMode() {

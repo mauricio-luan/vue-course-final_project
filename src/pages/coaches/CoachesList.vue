@@ -12,12 +12,8 @@
       <div class="controls">
         <base-button mode="outline" @click="setCoaches">Refresh</base-button>
         <!-- Esse botao so deve ser visivel quando usuario estiver autenticado -->
-        <base-button
-          v-if="!isCoach && !isLoading"
-          link
-          :to="isAuthenticated ? '/register' : '/auth'"
-        >
-          {{ isAuthenticated ? 'Register as a Coach' : 'Login to register as a Coach' }}
+        <base-button v-if="!isCoach && !isLoading" link :to="isAuthenticated.to">
+          {{ isAuthenticated.text }}
         </base-button>
       </div>
 
@@ -52,7 +48,6 @@ export default {
 
   created() {
     this.setCoaches()
-    // console.log(this.isAuthenticated)
   },
 
   data() {
@@ -75,7 +70,17 @@ export default {
     },
 
     isAuthenticated() {
-      return this.$store.getters['auth/isAuthenticated']
+      const isLogged = this.$store.getters['auth/isAuthenticated']
+      if (isLogged) {
+        return {
+          to: { name: 'coach-register' },
+          text: 'Register as a Coach',
+        }
+      }
+      return {
+        to: { name: 'user-authentication', query: { redirect: '/register' } },
+        text: 'Login to register as coach',
+      }
     },
 
     filteredCoaches() {
